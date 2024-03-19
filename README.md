@@ -27,8 +27,8 @@ Podemos encontrar a imagem do projeto no seguinte repositório do Docker hub [vw
 
 Siga as instruções abaixo para executar o projeto via docker/docker-compose:
 
-1. Faça o clone deste repositório: `https://github.com/fiap-pos/tech-challenge.git`
-2. Acesse o diretório do projeto: `cd tech-challenge`
+1. Faça o clone deste repositório: `https://github.com/fiap-pos/hackathon.git`
+2. Acesse o diretório do projeto: `cd hackathon`
 3. Execute o comando para iniciar o ambiente Docker: `docker-compose up -d`
 4. Aguarde até que os containers estejam prontos e em execução.
 5. Acesse a API pelo seu client de escolha pelo seguinte endereço base: `http://localhost:8080`
@@ -38,7 +38,7 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
 1. Certifique-se de ter o Java 17 instalado em sua máquina.
 2. Acesse o diretório do projeto: 
     ```bash 
-        cd tech-challenge
+        cd hackathon
     ```
 3. Execute o comando para buildar o projeto: 
     ```bash
@@ -56,22 +56,20 @@ Siga as instruções abaixo para executar o projeto via docker/docker-compose:
 
 ### Caso queira rodar o projeto dentro de um cluster kubernetes local
 
-1. Certifiquece de ter o kubectl instalado e devidamente configurado para cluster kubernetes
+1. Certifique-se de ter o kubectl instalado e devidamente configurado para cluster kubernetes
 2. Execute o comando: 
     ```bash
         kubectl apply -f deployment
     ```
-3. Aguarde até que os pods estejam com status de RUNNING. **Os pods da applicação podem apresentar erros até que o mysql termine de subir**
+3. Aguarde até que os pods estejam com status de RUNNING. 
 4. Acessando o serviço: 
     - Acesse a API pelo seu client de escolha pelo seguinte endereço base: `http://{IP_DO_SEU_CLUSTER}:30000`
     - Se você estiver utilizando o minikube obetenha a url da aplição através do comando:
     ```bash 
-        minikube service lanchonete-service --url
+        minikube service nlb-hackathon-ponto-service --url
     ```
 
 ## Contribuidores
-- [pedroprj](https://github.com/pedroprj) - Pedro Pereira dos Reis Júnior - pedrojr9119@gmail.com - RM 350295
 - [engmarcosalves](https://github.com/engmarcosalves) - Marcos de Oliveira Alves - eng.marcos.alves@gmail.com - RM 349707
 - [Vandrs](https://github.com/Vandrs) - Vanderson Wilson da Rosa Nunes - vann.nunes@gmail.com - RM 349849
 - [coelhos-gabi](https://github.com/coelhos-gabi) - Gabriela Siqueira do Vale Coelho - coelhos.gabi@gmail.com - RM 349957
-- [diego-jo](https://github.com/diego-jo) - Diego José Oliveira - oliveiraj.diego@gmail.com - RM 350296

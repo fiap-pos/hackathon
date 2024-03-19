@@ -1,6 +1,5 @@
 package br.com.fiap.hackathon.ponto.adapters.repository.sqs;
 
-import br.com.fiap.hackathon.ponto.adapters.gateways.producao.models.FilaProducaoDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
@@ -22,7 +21,7 @@ public class PedidoCriadoSqsPublisher {
         this.sqsTemplate = sqsTemplate;
     }
 
-    public void publicaFilaPedidoCriado(FilaProducaoDTO filaProducaoDTO) throws JsonProcessingException {
-        sqsTemplate.send(filaPedidoCriado, objectMapper.writeValueAsString(filaProducaoDTO));
-    }
+//    public void publicaFilaPedidoCriado(FilaProducaoDTO filaProducaoDTO) throws JsonProcessingException {
+//        sqsTemplate.send(filaPedidoCriado, objectMapper.writeValueAsString(filaProducaoDTO));
+//    }
 }
