@@ -2,6 +2,7 @@ package br.com.fiap.hackathon.ponto.adapters.repository.models;
 
 import br.com.fiap.hackathon.ponto.core.domain.entities.enums.TipoRegistroEnum;
 import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
@@ -9,7 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 import java.time.LocalDateTime;
-
+@Entity
 public class Ponto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +21,9 @@ public class Ponto {
     @Enumerated(EnumType.STRING)
     @Column(name = "tipo_registro")
     private TipoRegistroEnum tipoRegistro;
+
+    public Ponto() {
+    }
 
     public Ponto(String matricula, LocalDateTime registro, TipoRegistroEnum tipoRegistro) {
         this.matricula = matricula;

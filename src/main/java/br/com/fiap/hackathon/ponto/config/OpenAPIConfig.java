@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class OpenAPIConfig {
 
-    @Value("${techchalenge.openapi.dev-url}")
+    @Value("${hackathon.openapi.dev-url}")
     private String url;
 
     @Bean
@@ -22,9 +22,9 @@ public class OpenAPIConfig {
                 .description("URL do ambiente de desenvolvimento");
 
         var info = new Info()
-                .title("API de gerenciamento de pedidos")
+                .title("API de gerenciamento de registro de Ponto")
                 .version("1.0")
-                .description("Esta API expõe endpoints para gerenciar o sistema de pedidos de uma lanchonete do Tech Challenge");
+                .description("Esta API expõe endpoints para gerenciar o sistema de registro de pontos");
 
         return new OpenAPI().info(info).servers(List.of(devServer));
     }
