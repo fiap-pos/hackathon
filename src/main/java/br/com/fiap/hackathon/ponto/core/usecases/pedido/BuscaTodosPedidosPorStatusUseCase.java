@@ -4,9 +4,10 @@ import br.com.fiap.hackathon.ponto.core.dtos.PedidoDTO;
 import br.com.fiap.hackathon.ponto.core.domain.entities.enums.StatusPedidoEnum;
 import br.com.fiap.hackathon.ponto.core.ports.in.pedido.BuscaTodosPedidosPorStatusInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.pedido.BuscaTodosPedidosPorStatusOutputPort;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class BuscaTodosPedidosPorStatusUseCase implements BuscaTodosPedidosPorStatusInputPort {
 
     private final BuscaTodosPedidosPorStatusOutputPort buscaTodosPedidosPorStatusOutputPort;

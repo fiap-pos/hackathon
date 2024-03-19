@@ -6,7 +6,9 @@ import br.com.fiap.hackathon.ponto.core.ports.in.pedido.AtualizaStatusPedidoInpu
 import br.com.fiap.hackathon.ponto.core.ports.out.cliente.NotificaClienteOuputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.pedido.AtualizaStatusPedidoOutputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.pedido.EnviaPedidoFilaProducaoOutputPort;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AtualizaStatusPedidoUseCase implements AtualizaStatusPedidoInputPort {
     private final AtualizaStatusPedidoOutputPort atualizaStatusPedidoOutputPort;
     private final EnviaPedidoFilaProducaoOutputPort enviaPedidoFilaProducaoOutputPort;

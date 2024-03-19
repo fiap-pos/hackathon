@@ -11,9 +11,10 @@ import br.com.fiap.hackathon.ponto.core.ports.in.pedido.CriaPedidoInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.cliente.BuscaClienteOutputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.pedido.CriaPedidoOutputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.produto.BuscaProdutoPorIdOutputPort;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
-
+@Component
 public class CriaPedidoUseCase implements CriaPedidoInputPort {
 
     private final CriaPedidoOutputPort criaPedidoOutputPort;

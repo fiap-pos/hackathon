@@ -4,7 +4,9 @@ import br.com.fiap.hackathon.ponto.core.dtos.AtualizaImagemProdutoDTO;
 import br.com.fiap.hackathon.ponto.core.dtos.ProdutoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.in.produto.AtualizaImagemProdutoInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.produto.AtualizaImagemProdutoOutputPort;
+import org.springframework.stereotype.Component;
 
+@Component
 public class AtualizaImagemProdutoUseCase implements AtualizaImagemProdutoInputPort {
 
     AtualizaImagemProdutoOutputPort atualizaImagemProdutoOutputPort;
