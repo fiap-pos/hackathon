@@ -1,12 +1,11 @@
 package br.com.fiap.hackathon.ponto.core.usecases;
 
-import br.com.fiap.hackathon.ponto.core.domain.entities.Ponto;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.RegistraPontoOutputPort;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
-@Component
+@Service
 public class RegistraPontoUseCase implements RegistraPontoInputPort {
 
     private final RegistraPontoOutputPort registraPontoOutputPort;

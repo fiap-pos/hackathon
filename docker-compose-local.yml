@@ -11,11 +11,11 @@ services:
     ports:
       - "5432:5432"
     networks:
-      - hackathon_app_network
+      - hackathon_61_ponto_network
     expose:
       - 5432
   localstack:
-    container_name: hackathon-localstack
+    container_name: hackathon_61_ponto_localstack
     image: localstack/localstack
     ports:
       - "4566:4566"
@@ -27,6 +27,6 @@ services:
     volumes:
       - './docker/localstack/setup-queues.sh:/etc/localstack/init/ready.d/init-sqs.sh'
 networks:
-  hackathon_app_network:
+  hackathon_61_ponto_network:
     name: "hackathon_app_network"
     driver: bridge

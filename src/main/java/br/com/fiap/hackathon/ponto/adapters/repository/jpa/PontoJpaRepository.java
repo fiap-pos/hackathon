@@ -13,6 +13,6 @@ import java.util.List;
 public interface PontoJpaRepository extends JpaRepository<Ponto, Long> {
     List<Ponto> findAllByRegistro(LocalDateTime data);
 
-    @Query("SELECT p FROM Ponto p WHERE p.registro BETWEEN :startDate AND :endDate")
+    @Query("SELECT p FROM Ponto p WHERE p.registro BETWEEN :startDate AND :endDate ORDER BY p.registro ASC")
     List<Ponto> find(LocalDateTime startDate, LocalDateTime endDate);
 }

@@ -17,7 +17,7 @@ public class HeaderFilter extends OncePerRequestFilter {
                                     HttpServletResponse response, FilterChain filterChain)throws ServletException, IOException {
 
         response.setHeader("X-Content-Type-Options", "nosniff");
-        response.setHeader("Content-Security-Policy" ,"default-src");
+//        response.setHeader("Content-Security-Policy" ,"default-src");
         response.setHeader("X-Frame-Options", "SAMEORIGIN");
         filterChain.doFilter(request, response);
     }

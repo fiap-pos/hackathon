@@ -25,7 +25,7 @@ spec:
             type: DirectoryOrCreate
       containers:
         - name: hackathon-ponto
-          image: vwnunes/hackathon-ponto-61:latest #TODO: verificar o nome da imagem
+          image: vwnunes/hackathon-61-ponto:latest
           imagePullPolicy: "Always"
           ports:
             - containerPort: 8080

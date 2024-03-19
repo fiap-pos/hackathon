@@ -12,7 +12,7 @@ public class PedidoCriadoSqsPublisher {
 
     private ObjectMapper objectMapper;
 
-    @Value("${aws.sqs.queues.pedido-criado}")
+    @Value("${aws.sqs.queues.relatorios}")
     private String filaPedidoCriado;
 
     private SqsTemplate sqsTemplate;
