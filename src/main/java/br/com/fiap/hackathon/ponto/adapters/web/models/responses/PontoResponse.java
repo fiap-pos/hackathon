@@ -1,22 +1,21 @@
-package br.com.fiap.hackathon.ponto.core.domain.entities;
+package br.com.fiap.hackathon.ponto.adapters.web.models.responses;
 
 import br.com.fiap.hackathon.ponto.core.domain.entities.enums.TipoRegistroEnum;
+import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 
 import java.time.LocalDateTime;
 
-public class Ponto {
+public class PontoResponse {
+
     private Long id;
     private String matricula;
     private LocalDateTime registro;
     private TipoRegistroEnum tipoRegistro;
 
-    public Ponto(Long id, String matricula, LocalDateTime registro, TipoRegistroEnum tipoRegistro) {
+    public PontoResponse(Long id, String matricula, LocalDateTime registro, TipoRegistroEnum tipoRegistro) {
         this.id = id;
-        this.matricula = matricula;
-        this.registro = registro;
-        this.tipoRegistro = tipoRegistro;
-    }
-    public Ponto(String matricula, LocalDateTime registro, TipoRegistroEnum tipoRegistro) {
         this.matricula = matricula;
         this.registro = registro;
         this.tipoRegistro = tipoRegistro;
