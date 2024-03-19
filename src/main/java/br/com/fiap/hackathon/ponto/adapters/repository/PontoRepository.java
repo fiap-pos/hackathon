@@ -7,7 +7,9 @@ import br.com.fiap.hackathon.ponto.core.ports.out.BuscaStatusDiaOutputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.RegistraPontoOutputPort;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 @Repository
 public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaOutputPort {
@@ -29,7 +31,7 @@ public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaO
 
     @Override
     public List<PontoDTO> buscaStatusDia() {
-        var ponto = jpaRepository.findAllByRegistro(LocalDateTime.now());
+        var ponto = jpaRepository.find(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
         return mapper.toPontoDTOList(ponto);
     }
 }
