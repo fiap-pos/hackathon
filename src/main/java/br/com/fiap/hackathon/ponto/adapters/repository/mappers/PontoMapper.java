@@ -8,16 +8,9 @@ import java.util.List;
 
 @Component
 public class PontoMapper {
-//    private final AuthGateway authGateway;
-
-//    public PontoMapper(AuthGateway authGateway) {
-//        this.authGateway = authGateway;
-//    }
 
     public Ponto toPonto(PontoDTO pontoIn){
-        // TODO: pegar matrícula com authgateway
         return new Ponto(pontoIn.matricula(), pontoIn.horaRegistro(), pontoIn.tipoRegistro());
-
     }
 
     public PontoDTO toPontoDTO(Ponto ponto){

@@ -6,12 +6,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
-import java.util.Calendar;
 import java.util.List;
 
 @Repository
 public interface PontoJpaRepository extends JpaRepository<Ponto, Long> {
-    List<Ponto> findAllByRegistro(LocalDateTime data);
 
     @Query("SELECT p FROM Ponto p WHERE p.registro BETWEEN :startDate AND :endDate ORDER BY p.registro ASC")
     List<Ponto> find(LocalDateTime startDate, LocalDateTime endDate);

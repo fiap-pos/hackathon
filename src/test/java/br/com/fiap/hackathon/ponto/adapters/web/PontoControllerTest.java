@@ -53,8 +53,7 @@ public class PontoControllerTest {
     }
 
     @Test
-    void buscarPedidoPorId() throws Exception {
-        var id = 1L;
+    void buscarStatusDia() throws Exception {
         var pontoDTO = getPontoDTO();
 
         when(buscaStatusDiaInputPort.buscaStatusDia()).thenReturn(Collections.singletonList(pontoDTO));
