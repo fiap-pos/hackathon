@@ -16,6 +16,10 @@ public abstract class PontoHelper {
     public static PontoDTO getPontoDTO() {
         return new PontoDTO(ID, MATRICULA, REGISTRO, TIPO_REGISTRO);
     }
+
+    public static PontoDTO getPontoDTO_somenteMatricula() {
+        return new PontoDTO(MATRICULA, null, null);
+    }
     public static Ponto getPonto() {
         return new Ponto( MATRICULA, REGISTRO, TIPO_REGISTRO);
     }

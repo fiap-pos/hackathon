@@ -15,7 +15,7 @@ public class RegistraPontoUseCase implements RegistraPontoInputPort {
     }
 
     @Override
-    public PontoDTO registrar(PontoDTO pontoIn, String authorization) {
+    public PontoDTO registrar(PontoDTO pontoIn) {
         return registraPontoOutputPort.registrar(pontoIn);
     }
 }

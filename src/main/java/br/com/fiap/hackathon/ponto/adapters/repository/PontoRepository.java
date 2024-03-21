@@ -2,6 +2,7 @@ package br.com.fiap.hackathon.ponto.adapters.repository;
 
 import br.com.fiap.hackathon.ponto.adapters.repository.jpa.PontoJpaRepository;
 import br.com.fiap.hackathon.ponto.adapters.repository.mappers.PontoMapper;
+import br.com.fiap.hackathon.ponto.core.domain.entities.enums.TipoRegistroEnum;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.out.BuscaStatusDiaOutputPort;
 import br.com.fiap.hackathon.ponto.core.ports.out.RegistraPontoOutputPort;
@@ -11,6 +12,9 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+
+import static java.util.Objects.isNull;
+
 @Repository
 public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaOutputPort {
 
@@ -25,6 +29,15 @@ public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaO
     @Override
     public PontoDTO registrar(PontoDTO pontoIn) {
         var ponto = mapper.toPonto(pontoIn);
+        var pontoDoDia = buscaStatusDia();
+        var ultimoStatusDoDia = getLastElement(pontoDoDia);
+
+        if (pontoDoDia.isEmpty() || isNull(ultimoStatusDoDia) || ultimoStatusDoDia.tipoRegistro().equals(TipoRegistroEnum.SAIDA)) {
+            ponto.setTipoRegistro(TipoRegistroEnum.ENTRADA);
+        } else {
+            ponto.setTipoRegistro(TipoRegistroEnum.SAIDA);
+        }
+
         var pontoSalvo = jpaRepository.save(ponto);
         return mapper.toPontoDTO(pontoSalvo);
     }
@@ -33,5 +46,9 @@ public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaO
     public List<PontoDTO> buscaStatusDia() {
         var ponto = jpaRepository.find(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
         return mapper.toPontoDTOList(ponto);
+    }
+
+    private PontoDTO getLastElement(List<PontoDTO> pontoDoDia) {
+        return (!pontoDoDia.isEmpty()) ? pontoDoDia.get(pontoDoDia.size() - 1) : null;
     }
 }
