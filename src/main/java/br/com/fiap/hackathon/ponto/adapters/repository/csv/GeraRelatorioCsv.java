@@ -33,10 +33,13 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
     public String geraRelatorio(String matricula, int mes, int ano) {
         var inicio = LocalDateTime.of(ano, mes, 1, 0, 0);
         var fim = LocalDateTime.of(ano, mes, 29, 23, 59);
-        return geraRelatorioCSV(inicio, fim, nomeArquivo);
+        var nomeRelatorioCSV = nomeArquivo.replace("{matricula}", matricula)
+                .replace("{mes}", String.valueOf(mes))
+                .replace("{ano}", String.valueOf(ano));
+        return geraRelatorioCSV(inicio, fim, nomeRelatorioCSV);
     }
 
-    public String geraRelatorioCSV(LocalDateTime inicio, LocalDateTime fim, String nomeArquivo) {
+    public String geraRelatorioCSV(LocalDateTime inicio, LocalDateTime fim, String nomeRelatorioCSV) {
         List<Ponto> registros = pontoJpaRepository.find(inicio, fim);
 
         Map<LocalDate, List<Ponto>> registrosPorDia = registros.stream()
@@ -51,7 +54,7 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
 
         DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("HH:mm:ss");
 
-        try (CSVWriter writer = new CSVWriter(new FileWriter(nomeArquivo))) {
+        try (CSVWriter writer = new CSVWriter(new FileWriter(nomeRelatorioCSV))) {
             List<String> headerList = new ArrayList<>();
             headerList.add("Dia");
             for (int i = 0; i < maxRegistrosPorTipo; i++) {
@@ -84,7 +87,7 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return nomeArquivo;
+        return nomeRelatorioCSV;
     }
 
 
