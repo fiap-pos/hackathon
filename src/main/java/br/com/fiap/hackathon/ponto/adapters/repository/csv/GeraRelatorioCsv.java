@@ -36,11 +36,11 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
         var nomeRelatorioCSV = nomeArquivo.replace("{matricula}", matricula)
                 .replace("{mes}", String.valueOf(mes))
                 .replace("{ano}", String.valueOf(ano));
-        return geraRelatorioCSV(inicio, fim, nomeRelatorioCSV);
+        return geraRelatorioCSV(matricula, inicio, fim, nomeRelatorioCSV);
     }
 
-    public String geraRelatorioCSV(LocalDateTime inicio, LocalDateTime fim, String nomeRelatorioCSV) {
-        List<Ponto> registros = pontoJpaRepository.find(inicio, fim);
+    public String geraRelatorioCSV(String matricula, LocalDateTime inicio, LocalDateTime fim, String nomeRelatorioCSV) {
+        List<Ponto> registros = pontoJpaRepository.findByMatricula(matricula, inicio, fim);
 
         Map<LocalDate, List<Ponto>> registrosPorDia = registros.stream()
                 .collect(Collectors.groupingBy(p -> p.getRegistro().toLocalDate(), LinkedHashMap::new, Collectors.toList()));

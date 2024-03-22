@@ -2,6 +2,7 @@ package br.com.fiap.hackathon.ponto.adapters.web;
 
 import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
+import br.com.fiap.hackathon.ponto.core.ports.in.GeraRelatorioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class PontoControllerTest {
+class PontoControllerTest {
     private MockMvc mockMvc;
 
     @Mock
@@ -31,6 +32,10 @@ public class PontoControllerTest {
 
     @Mock
     BuscaStatusDiaInputPort buscaStatusDiaInputPort;
+
+    @Mock
+    GeraRelatorioInputPort geraRelatorioInputPort;
+
     PontoMapper mapper;
     AutoCloseable mock;
 
@@ -41,6 +46,7 @@ public class PontoControllerTest {
         PontoController pontoController = new PontoController(
                 registraPontoInputPort,
                 buscaStatusDiaInputPort,
+                geraRelatorioInputPort,
                 mapper
         );
 

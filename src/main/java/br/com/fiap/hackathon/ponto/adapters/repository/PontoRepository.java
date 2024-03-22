@@ -29,7 +29,7 @@ public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaO
     @Override
     public PontoDTO registrar(PontoDTO pontoIn) {
         var ponto = mapper.toPonto(pontoIn);
-        var pontoDoDia = buscaStatusDia();
+        var pontoDoDia = buscaStatusDiaPorMatricula(ponto.getMatricula());
         var ultimoStatusDoDia = getLastElement(pontoDoDia);
 
         if (pontoDoDia.isEmpty() || isNull(ultimoStatusDoDia) || ultimoStatusDoDia.tipoRegistro().equals(TipoRegistroEnum.SAIDA)) {
