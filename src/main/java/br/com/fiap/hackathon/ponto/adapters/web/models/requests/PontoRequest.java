@@ -1,9 +1,10 @@
 package br.com.fiap.hackathon.ponto.adapters.web.models.requests;
 
+import lombok.Getter;
+
+@Getter
 public class PontoRequest {
     private String matricula;
-
-    public String getMatricula() {
-        return matricula;
-    }
+    private int mes;
+    private int ano;
 }

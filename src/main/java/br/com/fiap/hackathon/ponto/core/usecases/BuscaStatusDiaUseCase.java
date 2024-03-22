@@ -20,4 +20,9 @@ public class BuscaStatusDiaUseCase implements BuscaStatusDiaInputPort {
     public List<PontoDTO> buscaStatusDia() {
         return buscaStatusDiaOutputPort.buscaStatusDia();
     }
+
+    @Override
+    public List<PontoDTO> buscaStatusDiaPorMatricula(String matricula) {
+        return buscaStatusDiaOutputPort.buscaStatusDiaPorMatricula(matricula);
+    }
 }

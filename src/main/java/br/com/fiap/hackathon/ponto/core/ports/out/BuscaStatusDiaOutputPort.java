@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface BuscaStatusDiaOutputPort {
     List<PontoDTO> buscaStatusDia();
+
+    List<PontoDTO> buscaStatusDiaPorMatricula(String matricula);
 }
