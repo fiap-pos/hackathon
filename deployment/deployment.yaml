@@ -34,17 +34,17 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: hackathon-ponto-secrets-aws
-                  key: mysqlHost
+                  key: postgresHost
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
                   name: hackathon-ponto-secrets-aws
-                  key: mysqlUser
+                  key: postgresUser
             - name: DB_PASS
               valueFrom:
                 secretKeyRef:
                   name: hackathon-ponto-secrets-aws
-                  key: mysqlPassword
+                  key: postgresPassword
             - name: MAIL_API_URL
               valueFrom:
                 secretKeyRef:
