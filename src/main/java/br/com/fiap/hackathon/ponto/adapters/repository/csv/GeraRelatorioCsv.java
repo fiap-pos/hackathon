@@ -13,14 +13,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
 
 @Repository
 @RequiredArgsConstructor
@@ -33,8 +32,11 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
 
     @Override
     public String geraRelatorio(String matricula, int mes, int ano) {
-        var inicio = LocalDateTime.of(ano, mes, 1, 0, 0);
-        var fim = LocalDateTime.of(ano, mes, inicio.with(lastDayOfMonth()).getDayOfMonth(), 23, 59);
+        YearMonth anoMes = YearMonth.of(ano, mes);
+        LocalDate ultimoDia = anoMes.atEndOfMonth();
+
+        var inicio = LocalDateTime.of(ano, 1, mes, 0, 0);
+        var fim = LocalDateTime.of(ano, mes, ultimoDia.getDayOfMonth(), 23, 59);
         var nomeRelatorioCSV = nomeArquivo.replace("{matricula}", matricula)
                 .replace("{mes}", String.valueOf(mes))
                 .replace("{ano}", String.valueOf(ano));
