@@ -1,8 +1,10 @@
 package br.com.fiap.hackathon.ponto.adapters.web.mappers;
 
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
+import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.responses.PontoResponse;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
+import br.com.fiap.hackathon.ponto.core.dtos.RelatorioPontoDTO;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -32,5 +34,12 @@ public class PontoMapper {
                 LocalDateTime.now(),
                 null
         );
+    }
+
+    public RelatorioPontoDTO toRelatorioPontoDTO(RelatorioPontoRequest relatorioPontoRequest) {
+        return new RelatorioPontoDTO(
+                relatorioPontoRequest.getMatricula(),
+                relatorioPontoRequest.getMes(),
+                relatorioPontoRequest.getAno());
     }
 }

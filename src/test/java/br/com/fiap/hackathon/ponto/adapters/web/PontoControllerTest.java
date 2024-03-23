@@ -2,7 +2,7 @@ package br.com.fiap.hackathon.ponto.adapters.web;
 
 import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
-import br.com.fiap.hackathon.ponto.core.ports.in.GeraRelatorioInputPort;
+import br.com.fiap.hackathon.ponto.core.ports.in.EnviaRelatorioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +34,7 @@ class PontoControllerTest {
     BuscaStatusDiaInputPort buscaStatusDiaInputPort;
 
     @Mock
-    GeraRelatorioInputPort geraRelatorioInputPort;
+    EnviaRelatorioInputPort enviaRelatorioInputPort;
 
     PontoMapper mapper;
     AutoCloseable mock;
@@ -46,7 +46,7 @@ class PontoControllerTest {
         PontoController pontoController = new PontoController(
                 registraPontoInputPort,
                 buscaStatusDiaInputPort,
-                geraRelatorioInputPort,
+                enviaRelatorioInputPort,
                 mapper
         );
 

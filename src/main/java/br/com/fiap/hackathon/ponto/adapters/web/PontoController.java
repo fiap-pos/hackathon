@@ -2,9 +2,10 @@ package br.com.fiap.hackathon.ponto.adapters.web;
 
 import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
+import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.responses.PontoResponse;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
-import br.com.fiap.hackathon.ponto.core.ports.in.GeraRelatorioInputPort;
+import br.com.fiap.hackathon.ponto.core.ports.in.EnviaRelatorioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,7 +30,7 @@ public class PontoController {
 
     private final RegistraPontoInputPort registraPontoInputPort;
     private final BuscaStatusDiaInputPort buscaStatusDiaInputPort;
-    private final GeraRelatorioInputPort geraRelatorioInputPort;
+    private final EnviaRelatorioInputPort enviaRelatorioInputPort;
     private final PontoMapper mapper;
 
     @Operation(summary = "Busca status do dia por matricula")
@@ -42,9 +43,10 @@ public class PontoController {
 
     @Operation(summary = "Gerar relatorio")
     @PostMapping("/relatorio")
-    public ResponseEntity<String> gerarRelatorio(@RequestBody PontoRequest pontoRequest) {
-        var mensagem = geraRelatorioInputPort.geraRelatorio(pontoRequest.getMatricula(), pontoRequest.getMes(), pontoRequest.getAno());
-        return ResponseEntity.ok(mensagem);
+    public ResponseEntity<String> gerarRelatorio(@RequestBody RelatorioPontoRequest relatorioPontoRequest) {
+        var relatorioPontoIn = mapper.toRelatorioPontoDTO(relatorioPontoRequest);
+        var relatorioPontoOut = enviaRelatorioInputPort.enviaRelatorioPonto(relatorioPontoIn);
+        return ResponseEntity.ok(relatorioPontoOut);
     }
 
     @Operation(summary = "Registrar ponto")
