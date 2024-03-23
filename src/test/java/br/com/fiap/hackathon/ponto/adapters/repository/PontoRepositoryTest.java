@@ -3,15 +3,12 @@ package br.com.fiap.hackathon.ponto.adapters.repository;
 import br.com.fiap.hackathon.ponto.adapters.repository.jpa.PontoJpaRepository;
 import br.com.fiap.hackathon.ponto.adapters.repository.mappers.FilaRelatorioPontoMapper;
 import br.com.fiap.hackathon.ponto.adapters.repository.mappers.PontoMapper;
-import br.com.fiap.hackathon.ponto.adapters.repository.models.Ponto;
 import br.com.fiap.hackathon.ponto.adapters.repository.sqs.RelatorioPontoSqsPublisher;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.junit.jupiter.api.BeforeEach;
 import org.mockito.MockitoAnnotations;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

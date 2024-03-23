@@ -12,13 +12,12 @@ import org.springframework.stereotype.Component;
 public class RelatorioPontoSqsPublisher {
 
     private final Logger logger = LoggerFactory.getLogger(RelatorioPontoSqsPublisher.class);
-
-    private ObjectMapper objectMapper;
+    private final ObjectMapper objectMapper;
+    private final SqsTemplate sqsTemplate;
 
     @Value("${aws.sqs.queues.relatorios}")
     private String filaRelatorios;
 
-    private SqsTemplate sqsTemplate;
 
     public RelatorioPontoSqsPublisher(ObjectMapper objectMapper, SqsTemplate sqsTemplate) {
         this.objectMapper = objectMapper;
