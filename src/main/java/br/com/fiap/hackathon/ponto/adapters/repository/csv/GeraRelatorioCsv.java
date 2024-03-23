@@ -20,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import static java.time.temporal.TemporalAdjusters.lastDayOfMonth;
+
 @Repository
 @RequiredArgsConstructor
 public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
@@ -32,7 +34,7 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
     @Override
     public String geraRelatorio(String matricula, int mes, int ano) {
         var inicio = LocalDateTime.of(ano, mes, 1, 0, 0);
-        var fim = LocalDateTime.of(ano, mes, 29, 23, 59);
+        var fim = LocalDateTime.of(ano, mes, inicio.with(lastDayOfMonth()).getDayOfMonth(), 23, 59);
         var nomeRelatorioCSV = nomeArquivo.replace("{matricula}", matricula)
                 .replace("{mes}", String.valueOf(mes))
                 .replace("{ano}", String.valueOf(ano));
