@@ -55,8 +55,6 @@ spec:
                 secretKeyRef:
                   name: hackathon-ponto-secrets-aws
                   key: mailApiKey
-            - name: AUTH_URL
-              value: "http://nlb-auth-service"
           volumeMounts:
             - name: hackathon-volume
               mountPath: "/mnt/hackathon-ponto-volume"

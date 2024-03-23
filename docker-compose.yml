@@ -33,7 +33,7 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
     environment:
-      DB_HOST: 'mysql:3306/lanchonete_db' #TODO AJUSTAR PORTA
+      DB_HOST: 'postgres:5432/ponto_db'
       DB_USER: 'root'
       DB_PASS: '123456'
     ports:

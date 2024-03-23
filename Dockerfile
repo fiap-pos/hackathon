@@ -11,6 +11,6 @@ COPY --from=build /app/target/hackathon-ponto-*.jar /app/java-application.jar
 WORKDIR /app
 RUN addgroup --system hackathon-ponto-app && useradd -r hackathon-ponto-app -g hackathon-ponto-app
 RUN chown -R hackathon-ponto-app:hackathon-ponto-app /app
-USER lanchonete-app
+USER hackathon-ponto-app
 EXPOSE 8080
 CMD "dumb-init" "java" "-jar" "java-application.jar"
