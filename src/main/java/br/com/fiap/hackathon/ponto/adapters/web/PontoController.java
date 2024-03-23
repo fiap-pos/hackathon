@@ -32,17 +32,9 @@ public class PontoController {
     private final GeraRelatorioInputPort geraRelatorioInputPort;
     private final PontoMapper mapper;
 
-    @Operation(summary = "Busca status do dia")
-    @GetMapping
-    public ResponseEntity<List<PontoResponse>> buscarStatusDia() {
-        var pontosOut = buscaStatusDiaInputPort.buscaStatusDia();
-        var listPontoResponse = mapper.toPontoListResponse(pontosOut);
-        return ResponseEntity.ok(listPontoResponse);
-    }
-
     @Operation(summary = "Busca status do dia por matricula")
     @GetMapping("/{matricula}")
-    public ResponseEntity<List<PontoResponse>> buscarStatusDia(@PathVariable("matricula") String matricula) {
+    public ResponseEntity<List<PontoResponse>> buscarStatusDiaPorMatricula(@PathVariable("matricula") String matricula) {
         var pontosOut = buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(matricula);
         var listPontoResponse = mapper.toPontoListResponse(pontosOut);
         return ResponseEntity.ok(listPontoResponse);

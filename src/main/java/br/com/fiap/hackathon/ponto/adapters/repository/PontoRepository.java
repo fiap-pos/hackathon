@@ -43,12 +43,6 @@ public class PontoRepository implements RegistraPontoOutputPort, BuscaStatusDiaO
     }
 
     @Override
-    public List<PontoDTO> buscaStatusDia() {
-        var ponto = jpaRepository.find(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
-        return mapper.toPontoDTOList(ponto);
-    }
-
-    @Override
     public List<PontoDTO> buscaStatusDiaPorMatricula(String matricula) {
         var ponto = jpaRepository.findByMatriculaAndRegistroBetween(matricula, LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
         return mapper.toPontoDTOList(ponto);

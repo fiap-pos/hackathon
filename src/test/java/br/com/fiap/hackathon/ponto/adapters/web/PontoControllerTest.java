@@ -62,13 +62,13 @@ class PontoControllerTest {
     void buscarStatusDia() throws Exception {
         var pontoDTO = getPontoDTO();
 
-        when(buscaStatusDiaInputPort.buscaStatusDia()).thenReturn(Collections.singletonList(pontoDTO));
+        when(buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(getPontoDTO().matricula())).thenReturn(Collections.singletonList(pontoDTO));
 
-        ResultActions result = mockMvc.perform(get("/ponto").contentType(MediaType.APPLICATION_JSON));
+        ResultActions result = mockMvc.perform(get("/ponto/{matricula}", pontoDTO.matricula()).contentType(MediaType.APPLICATION_JSON));
 
         result.andExpect(status().isOk());
 
-        verify(buscaStatusDiaInputPort, times(1)).buscaStatusDia();
+        verify(buscaStatusDiaInputPort, times(1)).buscaStatusDiaPorMatricula(getPontoDTO().matricula());
         verifyNoMoreInteractions(buscaStatusDiaInputPort);
     }
 

@@ -17,7 +17,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
-public class BuscaStatusDiaUseCaseTest {
+class BuscaStatusDiaUseCaseTest {
 
     private BuscaStatusDiaInputPort buscaStatusDiaInputPort;
 
@@ -40,9 +40,9 @@ public class BuscaStatusDiaUseCaseTest {
     void buscaStatusDia() {
         var pontoDTO = getPontoDTO();
         var pontoDTOList = List.of(getPontoDTO());
-        when(buscaStatusDiaOutputPort.buscaStatusDia()).thenReturn(pontoDTOList);
+        when(buscaStatusDiaOutputPort.buscaStatusDiaPorMatricula(getPontoDTO().matricula())).thenReturn(pontoDTOList);
 
-        var pontoList = buscaStatusDiaInputPort.buscaStatusDia();
+        var pontoList = buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(pontoDTO.matricula());
 
         assertThat(pontoList).isNotNull().isNotEmpty()
                 .allSatisfy(pontoBuscado -> {
@@ -51,7 +51,7 @@ public class BuscaStatusDiaUseCaseTest {
                     assertThat(pontoBuscado.matricula()).isEqualTo(pontoDTOList.get(0).matricula());
                     assertThat(pontoBuscado.tipoRegistro()).isEqualTo(pontoDTOList.get(0).tipoRegistro());
                 });
-        verify(buscaStatusDiaOutputPort, times(1)).buscaStatusDia();
+        verify(buscaStatusDiaOutputPort, times(1)).buscaStatusDiaPorMatricula(pontoDTO.matricula());
         verifyNoMoreInteractions(buscaStatusDiaOutputPort);
     }
 }

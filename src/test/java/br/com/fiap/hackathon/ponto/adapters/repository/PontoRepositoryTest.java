@@ -22,7 +22,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class PontoRepositoryTest {
+class PontoRepositoryTest {
 
     private PontoRepository repository;
 
@@ -51,14 +51,14 @@ public class PontoRepositoryTest {
             var listaPontos = List.of(ponto);
             var pontoDTOList = List.of(getPontoDTO());
 
-            when(jpaRepository.find(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX))).thenReturn(listaPontos);
+            when(jpaRepository.findByMatriculaAndRegistroBetween(getPontoDTO().matricula(), LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX))).thenReturn(listaPontos);
             when(mapper.toPontoDTOList(listaPontos)).thenReturn(pontoDTOList);
 
-            var listaPontosEncontrados = repository.buscaStatusDia();
+            var listaPontosEncontrados = repository.buscaStatusDiaPorMatricula(getPontoDTO().matricula());
 
             assertThat(listaPontosEncontrados).isNotNull();
 
-            verify(jpaRepository, times(1)).find(LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
+            verify(jpaRepository, times(1)).findByMatriculaAndRegistroBetween(getPontoDTO().matricula(), LocalDateTime.of(LocalDate.now(), LocalTime.MIN), LocalDateTime.of(LocalDate.now(), LocalTime.MAX));
             verify(mapper, times(1)).toPontoDTOList(any());
     }
 }
