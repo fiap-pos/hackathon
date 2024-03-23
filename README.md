@@ -1,11 +1,11 @@
 # Sistema de Controle de Pedidos para Lanchonete
 
-Este projeto é um sistema de controle de pedidos para uma lanchonete. Ele possui as seguintes funcionalidades:
+Este projeto é um sistema de gerenciamento de controle de pontos. Ele possui as seguintes funcionalidades:
 
-- Cadastro e gerenciamento de clientes
-- Cadastro e gerenciamento de produtos
-- Criação, atualização e acompanhamento de pedidos
-- Integração com meios de pagamento
+- Registro de ponto
+- Criação de relatório dos registro no mês
+- Busca os registros de ponto do dia
+- Busca os registros de ponto do dia a partir de uma matrícula
 
 ## Rotas disponíveis na API
 Todas as rotas estão listadas através do Swagger no endereço `http://localhost:8080/swagger-ui/index.html`
@@ -21,7 +21,7 @@ Antes de executar o projeto, verifique se você possui os seguintes requisitos:
 
 ## Imagem Docker do projeto
 
-Podemos encontrar a imagem do projeto no seguinte repositório do Docker hub [vwnunes/tech-challenge-61](https://hub.docker.com/repository/docker/vwnunes/tech-challenge-61/general)
+Podemos encontrar a imagem do projeto no seguinte repositório do Docker hub [vwnunes/hackathon-61-ponto](https://hub.docker.com/repository/docker/vwnunes/hackathon-61-ponto/general)
 
 ## Executando o Projeto
 
