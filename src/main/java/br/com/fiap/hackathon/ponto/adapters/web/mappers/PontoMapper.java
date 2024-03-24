@@ -36,11 +36,13 @@ public class PontoMapper {
         );
     }
 
-    public RelatorioPontoDTO toRelatorioPontoDTO(RelatorioPontoRequest relatorioPontoRequest, String email) {
+    public RelatorioPontoDTO toRelatorioPontoDTO(RelatorioPontoRequest relatorioPontoRequest, String email, String matricula) {
         return new RelatorioPontoDTO(
-                relatorioPontoRequest.getMatricula(),
+                matricula,
                 relatorioPontoRequest.getMes(),
                 relatorioPontoRequest.getAno(),
-                email, null);
+                email,
+                null
+        );
     }
 }

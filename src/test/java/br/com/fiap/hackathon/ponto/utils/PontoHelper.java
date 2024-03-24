@@ -1,6 +1,7 @@
 package br.com.fiap.hackathon.ponto.utils;
 
 import br.com.fiap.hackathon.ponto.adapters.repository.models.Ponto;
+import br.com.fiap.hackathon.ponto.core.domain.entities.Usuario;
 import br.com.fiap.hackathon.ponto.core.domain.entities.enums.TipoRegistroEnum;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
 
@@ -15,6 +16,10 @@ public abstract class PontoHelper {
 
     public static PontoDTO getPontoDTO() {
         return new PontoDTO(ID, MATRICULA, REGISTRO, TIPO_REGISTRO);
+    }
+
+    public static Usuario getUsuario() {
+        return new Usuario(MATRICULA, "senha", "email");
     }
 
     public static PontoDTO getPontoDTO_somenteMatricula() {

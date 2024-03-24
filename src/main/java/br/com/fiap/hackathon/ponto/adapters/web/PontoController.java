@@ -4,20 +4,15 @@ import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.responses.PontoResponse;
-import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
-import br.com.fiap.hackathon.ponto.core.ports.in.BuscaUsuarioInputPort;
-import br.com.fiap.hackathon.ponto.core.ports.in.EnviaRelatorioInputPort;
-import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
+import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
+import br.com.fiap.hackathon.ponto.core.ports.in.*;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
@@ -26,6 +21,7 @@ import java.util.List;
 @Tag(name = "Ponto", description = "API para gerenciamento de registro de ponto")
 @RestController
 @RequestMapping("/ponto")
+@RequiredArgsConstructor
 public class PontoController {
 
     private final RegistraPontoInputPort registraPontoInputPort;
@@ -33,18 +29,13 @@ public class PontoController {
     private final BuscaUsuarioInputPort buscaUsuarioInputPort;
     private final EnviaRelatorioInputPort enviaRelatorioInputPort;
     private final PontoMapper mapper;
+    private final TokenInputport tokenInputport;
 
-    public PontoController(RegistraPontoInputPort registraPontoInputPort, BuscaStatusDiaInputPort buscaStatusDiaInputPort, BuscaUsuarioInputPort buscaUsuarioInputPort, EnviaRelatorioInputPort enviaRelatorioInputPort, PontoMapper mapper) {
-        this.registraPontoInputPort = registraPontoInputPort;
-        this.buscaStatusDiaInputPort = buscaStatusDiaInputPort;
-        this.buscaUsuarioInputPort = buscaUsuarioInputPort;
-        this.enviaRelatorioInputPort = enviaRelatorioInputPort;
-        this.mapper = mapper;
-    }
-
-    @Operation(summary = "Busca status do dia por matricula")
-    @GetMapping("/{matricula}")
-    public ResponseEntity<List<PontoResponse>> buscarStatusDiaPorMatricula(@PathVariable("matricula") String matricula) {
+    @Operation(summary = "Busca status do dia")
+    @GetMapping("")
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<List<PontoResponse>> buscarStatusDiaPorMatricula(@Parameter(hidden = true) @RequestHeader(name = "Authorization") String token) {
+        var matricula = tokenInputport.getMatricula(token);
         var pontosOut = buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(matricula);
         var listPontoResponse = mapper.toPontoListResponse(pontosOut);
         return ResponseEntity.ok(listPontoResponse);
@@ -52,17 +43,24 @@ public class PontoController {
 
     @Operation(summary = "Gerar relatorio")
     @PostMapping("/relatorio")
-    public ResponseEntity<String> gerarRelatorio(@RequestBody RelatorioPontoRequest relatorioPontoRequest) {
-        var usuario = buscaUsuarioInputPort.buscaUsuarioPorMatricula(relatorioPontoRequest.getMatricula());
-        var relatorioPontoIn = mapper.toRelatorioPontoDTO(relatorioPontoRequest, usuario.email());
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<String> gerarRelatorio(
+            @Parameter(hidden = true) @RequestHeader(name = "Authorization") String token,
+            @RequestBody RelatorioPontoRequest relatorioPontoRequest
+    ) {
+        var matricula = tokenInputport.getMatricula(token);
+        var usuario = buscaUsuarioInputPort.buscaUsuarioPorMatricula(matricula);
+        var relatorioPontoIn = mapper.toRelatorioPontoDTO(relatorioPontoRequest, usuario.email(), matricula);
         var relatorioPontoOut = enviaRelatorioInputPort.enviaRelatorioPontoParaFilaRelatorios(relatorioPontoIn);
         return ResponseEntity.ok(relatorioPontoOut);
     }
 
     @Operation(summary = "Registrar ponto")
     @PostMapping
-    public ResponseEntity<PontoResponse> registrarPonto(@RequestBody PontoRequest pontoRequest) {
-        var pontoIn = mapper.toPontoDTO(pontoRequest);
+    @SecurityRequirement(name = "Bearer Authentication")
+    public ResponseEntity<PontoResponse> registrarPonto(@Parameter(hidden = true) @RequestHeader(name = "Authorization") String token) {
+        var matricula = tokenInputport.getMatricula(token);
+        var pontoIn = mapper.toPontoDTO(new PontoRequest(matricula));
         var pontoOut = registraPontoInputPort.registrar(pontoIn);
         var pontoResponseOut = mapper.toPontoResponse(pontoOut);
         return ResponseEntity.created(getExpandedCurrentUri(pontoResponseOut.getId())).body(pontoResponseOut);

@@ -6,7 +6,6 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class RelatorioPontoRequest {
-    private String matricula;
     private int mes;
     private int ano;
 }

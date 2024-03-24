@@ -8,6 +8,7 @@ public abstract class RelatorioHelper {
     private static final String MATRICULA = "12345";
     private static final int MES = 2;
     private static final int ANO = 2024;
+    private static final String SENHA = "12345";
 
     private static final String EMAIL = "teste@email.com";
     public static FilaRelatorioDTO getFilaRelatorioDTO(){
@@ -23,6 +24,6 @@ public abstract class RelatorioHelper {
     }
 
     public static UsuarioDTO getUsuarioDTO(){
-        return new UsuarioDTO(MATRICULA, EMAIL);
+        return new UsuarioDTO(MATRICULA, EMAIL, SENHA);
     }
 }

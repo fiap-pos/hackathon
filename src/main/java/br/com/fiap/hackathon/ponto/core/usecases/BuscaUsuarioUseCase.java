@@ -1,25 +1,21 @@
 package br.com.fiap.hackathon.ponto.core.usecases;
 
-import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
 import br.com.fiap.hackathon.ponto.core.dtos.UsuarioDTO;
-import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaUsuarioInputPort;
-import br.com.fiap.hackathon.ponto.core.ports.out.BuscaStatusDiaOutputPort;
-import br.com.fiap.hackathon.ponto.core.ports.out.BuscaUsuarioOutputPort;
+import br.com.fiap.hackathon.ponto.core.ports.out.BuscaUsuarioPorMatriculaOutputPort;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class BuscaUsuarioUseCase implements BuscaUsuarioInputPort {
 
-    private final BuscaUsuarioOutputPort buscaUsuarioOutputPort;
+    private final BuscaUsuarioPorMatriculaOutputPort buscaUsuarioPorMatriculaOutputPort;
 
-    public BuscaUsuarioUseCase(BuscaUsuarioOutputPort buscaUsuarioOutputPort) {
-        this.buscaUsuarioOutputPort = buscaUsuarioOutputPort;
+    public BuscaUsuarioUseCase(BuscaUsuarioPorMatriculaOutputPort buscaUsuarioOutputPort) {
+        this.buscaUsuarioPorMatriculaOutputPort = buscaUsuarioOutputPort;
     }
+
     @Override
     public UsuarioDTO buscaUsuarioPorMatricula(String matricula) {
-        return buscaUsuarioOutputPort.buscaUsuarioPorMatricula(matricula);
+        return buscaUsuarioPorMatriculaOutputPort.buscaPorMatricula(matricula);
     }
 }
