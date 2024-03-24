@@ -5,6 +5,7 @@ import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.responses.PontoResponse;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
+import br.com.fiap.hackathon.ponto.core.ports.in.BuscaUsuarioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.EnviaRelatorioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,13 +26,21 @@ import java.util.List;
 @Tag(name = "Ponto", description = "API para gerenciamento de registro de ponto")
 @RestController
 @RequestMapping("/ponto")
-@RequiredArgsConstructor
 public class PontoController {
 
     private final RegistraPontoInputPort registraPontoInputPort;
     private final BuscaStatusDiaInputPort buscaStatusDiaInputPort;
+    private final BuscaUsuarioInputPort buscaUsuarioInputPort;
     private final EnviaRelatorioInputPort enviaRelatorioInputPort;
     private final PontoMapper mapper;
+
+    public PontoController(RegistraPontoInputPort registraPontoInputPort, BuscaStatusDiaInputPort buscaStatusDiaInputPort, BuscaUsuarioInputPort buscaUsuarioInputPort, EnviaRelatorioInputPort enviaRelatorioInputPort, PontoMapper mapper) {
+        this.registraPontoInputPort = registraPontoInputPort;
+        this.buscaStatusDiaInputPort = buscaStatusDiaInputPort;
+        this.buscaUsuarioInputPort = buscaUsuarioInputPort;
+        this.enviaRelatorioInputPort = enviaRelatorioInputPort;
+        this.mapper = mapper;
+    }
 
     @Operation(summary = "Busca status do dia por matricula")
     @GetMapping("/{matricula}")
@@ -44,8 +53,9 @@ public class PontoController {
     @Operation(summary = "Gerar relatorio")
     @PostMapping("/relatorio")
     public ResponseEntity<String> gerarRelatorio(@RequestBody RelatorioPontoRequest relatorioPontoRequest) {
-        var relatorioPontoIn = mapper.toRelatorioPontoDTO(relatorioPontoRequest);
-        var relatorioPontoOut = enviaRelatorioInputPort.enviaRelatorioPonto(relatorioPontoIn);
+        var usuario = buscaUsuarioInputPort.buscaUsuarioPorMatricula(relatorioPontoRequest.getMatricula());
+        var relatorioPontoIn = mapper.toRelatorioPontoDTO(relatorioPontoRequest, usuario.email());
+        var relatorioPontoOut = enviaRelatorioInputPort.enviaRelatorioPontoParaFilaRelatorios(relatorioPontoIn);
         return ResponseEntity.ok(relatorioPontoOut);
     }
 

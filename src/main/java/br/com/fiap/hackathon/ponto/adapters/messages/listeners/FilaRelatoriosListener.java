@@ -1,8 +1,10 @@
 package br.com.fiap.hackathon.ponto.adapters.messages.listeners;
 
 import br.com.fiap.hackathon.ponto.adapters.gateways.models.FilaRelatorioDTO;
+import br.com.fiap.hackathon.ponto.adapters.repository.mappers.FilaRelatorioPontoMapper;
+import br.com.fiap.hackathon.ponto.core.dtos.RelatorioPontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.out.GeraRelatorioOutputPort;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import br.com.fiap.hackathon.ponto.core.ports.out.NotificaSolicitanteRelatorioPontoOuputPort;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import lombok.RequiredArgsConstructor;
@@ -21,26 +23,48 @@ public class FilaRelatoriosListener {
 
     private final ObjectMapper objectMapper;
 
+    private final NotificaSolicitanteRelatorioPontoOuputPort notificaSolicitanteRelatorioPontoOuputPort;
+
+    private final FilaRelatorioPontoMapper filaRelatorioPontoMapper;
 
     @SqsListener("${aws.sqs.queues.relatorios}")
-    public void listen(Message menssagem) throws JsonProcessingException {
-        logger.info("Recebendo mensagem da fila de relatórios");
-        var filaRelatorioDTO = objectMapper.readValue(menssagem.body(), FilaRelatorioDTO.class);
-        logger.info("Mensagem recebida da fila de relatórios com sucesso");
-        geraRelatorio(filaRelatorioDTO);
+    public void listen(Message menssagem) {
+        try {
+            logger.info("Recebendo mensagem da fila de relatórios");
+            var filaRelatorioDTO = objectMapper.readValue(menssagem.body(), FilaRelatorioDTO.class);
+            logger.info("Mensagem recebida da fila de relatórios com sucesso");
+            geraRelatorio(filaRelatorioDTO);
+        } catch (Exception e) {
+            logger.error("Erro ao processar mensagem da fila de relatórios", e);
+        }
     }
 
     private void geraRelatorio(FilaRelatorioDTO filaRelatorioDTO) {
         try {
             logger.info("Gerando relatório...");
-            geraRelatorioOutputPort.geraRelatorio(
+            String nomeArquivoRelatorio = geraRelatorioOutputPort.geraRelatorio(
                     filaRelatorioDTO.matricula(),
                     filaRelatorioDTO.mes(),
                     filaRelatorioDTO.ano()
             );
             logger.info("Relatório gerado com sucesso");
+
+            var relatorioPontoDTO = filaRelatorioPontoMapper.toRelatorioPontoDTO(filaRelatorioDTO, nomeArquivoRelatorio);
+            notificaSolicitanteDoRelatorio(relatorioPontoDTO);
+
+            geraRelatorioOutputPort.deleteRelatorio(nomeArquivoRelatorio);
         } catch (Exception e) {
             logger.error("Erro ao gerar relatório", e);
+        }
+    }
+
+    private void notificaSolicitanteDoRelatorio(RelatorioPontoDTO relatorioPontoDTO) {
+        try {
+            logger.info("Notificando solicitante do relatório de ponto");
+            notificaSolicitanteRelatorioPontoOuputPort.notificaClienteStatusPedido(relatorioPontoDTO);
+            logger.info("Solicitante do relatório de ponto notificado com sucesso");
+        } catch (Exception e) {
+            logger.error("Erro ao notificar solicitante do relatório de ponto", e);
         }
     }
 }

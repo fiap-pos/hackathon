@@ -6,11 +6,16 @@ import br.com.fiap.hackathon.ponto.core.domain.entities.enums.TipoRegistroEnum;
 import br.com.fiap.hackathon.ponto.core.ports.out.GeraRelatorioOutputPort;
 import com.opencsv.CSVWriter;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -25,6 +30,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
 
+    private Logger logger = LoggerFactory.getLogger(GeraRelatorioCsv.class);
+
     private final PontoJpaRepository pontoJpaRepository;
 
     @Value("${relatorio.csv}")
@@ -36,6 +43,11 @@ public class GeraRelatorioCsv implements GeraRelatorioOutputPort {
         LocalDateTime fim = getFimDoMes(inicio);
         String nomeRelatorioCSV = formatarNomeArquivo(matricula, mes, ano);
         return geraRelatorioCSV(matricula, inicio, fim, nomeRelatorioCSV);
+    }
+
+    @Override
+    public void deleteRelatorio(String nomeArquivoRelatorio) throws IOException {
+        Files.delete(Path.of(nomeArquivoRelatorio));
     }
 
     private LocalDateTime getFimDoMes(LocalDateTime inicio) {

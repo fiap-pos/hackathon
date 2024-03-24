@@ -1,7 +1,9 @@
 package br.com.fiap.hackathon.ponto.adapters.messages.listeners;
 
 import br.com.fiap.hackathon.ponto.adapters.gateways.models.FilaRelatorioDTO;
+import br.com.fiap.hackathon.ponto.adapters.repository.mappers.FilaRelatorioPontoMapper;
 import br.com.fiap.hackathon.ponto.core.ports.out.GeraRelatorioOutputPort;
+import br.com.fiap.hackathon.ponto.core.ports.out.NotificaSolicitanteRelatorioPontoOuputPort;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -26,12 +28,18 @@ class FilaRelatoriosListenerTest {
     @Mock
     private ObjectMapper objectMapper;
 
+    @Mock
+    NotificaSolicitanteRelatorioPontoOuputPort notificaSolicitanteRelatorioPontoOuputPort;
+
+    @Mock
+    FilaRelatorioPontoMapper filaRelatorioPontoMapper;
+
     AutoCloseable openMocks;
 
     @BeforeEach
     void setup() {
         openMocks = MockitoAnnotations.openMocks(this);
-        filaRelatoriosListener = new FilaRelatoriosListener(geraRelatorioOutputPort, objectMapper);
+        filaRelatoriosListener = new FilaRelatoriosListener(geraRelatorioOutputPort, objectMapper, notificaSolicitanteRelatorioPontoOuputPort, filaRelatorioPontoMapper);
     }
 
     @AfterEach
@@ -41,7 +49,7 @@ class FilaRelatoriosListenerTest {
 
     @Test
     void listenTest() throws JsonProcessingException {
-        var filaRelatorioDTO = new FilaRelatorioDTO("12345", 2, 2024);
+        var filaRelatorioDTO = new FilaRelatorioDTO("12345", 2, 2024, "teste@email.com");
         var filaRelatorioDTOJson = getPedidoJson(filaRelatorioDTO);
         var message = mock(Message.class);
         var filaRelatorioDTORetorno = getFilaRelatorioDTO();

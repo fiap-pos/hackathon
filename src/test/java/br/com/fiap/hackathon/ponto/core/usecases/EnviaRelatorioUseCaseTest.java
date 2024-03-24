@@ -35,7 +35,7 @@ class EnviaRelatorioUseCaseTest {
     void enviaRelatorioPonto() {
         var relatorioPontoDTO = getRelatorioPontoDTO();
         when(enviaRelatorioFilaRelatoriosOutputPort.enviarRelatorio(relatorioPontoDTO)).thenReturn(getMensagem());
-        var retorno = enviaRelatorioFilaRelatoriosInputPort.enviaRelatorioPonto(relatorioPontoDTO);
+        var retorno = enviaRelatorioFilaRelatoriosInputPort.enviaRelatorioPontoParaFilaRelatorios(relatorioPontoDTO);
         assertThat(retorno).isEqualTo(getMensagem());
     }
 }

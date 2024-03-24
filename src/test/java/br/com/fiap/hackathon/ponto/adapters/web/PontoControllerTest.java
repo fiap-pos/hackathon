@@ -2,9 +2,11 @@ package br.com.fiap.hackathon.ponto.adapters.web;
 
 import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
+import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
 import br.com.fiap.hackathon.ponto.core.dtos.RelatorioPontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
+import br.com.fiap.hackathon.ponto.core.ports.in.BuscaUsuarioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.EnviaRelatorioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +24,7 @@ import java.util.Collections;
 import static br.com.fiap.hackathon.ponto.utils.JsonToStringHelper.asJsonString;
 import static br.com.fiap.hackathon.ponto.utils.PontoHelper.getPontoDTO;
 import static br.com.fiap.hackathon.ponto.utils.RelatorioHelper.getRelatorioPontoDTO;
+import static br.com.fiap.hackathon.ponto.utils.RelatorioHelper.getUsuarioDTO;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -41,20 +44,26 @@ class PontoControllerTest {
     BuscaStatusDiaInputPort buscaStatusDiaInputPort;
 
     @Mock
+    BuscaUsuarioInputPort buscaUsuarioInputPort;
+
+    @Mock
     EnviaRelatorioInputPort enviaRelatorioInputPort;
 
     PontoMapper mapper;
     AutoCloseable mock;
-    PontoRequest relatorioPontoRequest;
+    PontoRequest pontoRequest;
+    RelatorioPontoRequest relatorioPontoRequest;
 
     @BeforeEach
     void setUp() {
-        relatorioPontoRequest = new PontoRequest("12345");
+        pontoRequest = new PontoRequest("12345");
+        relatorioPontoRequest = new RelatorioPontoRequest("12345", 2, 2024);
         this.mapper = new PontoMapper();
         mock = MockitoAnnotations.openMocks(this);
         PontoController pontoController = new PontoController(
                 registraPontoInputPort,
                 buscaStatusDiaInputPort,
+                buscaUsuarioInputPort,
                 enviaRelatorioInputPort,
                 mapper
         );
@@ -84,8 +93,13 @@ class PontoControllerTest {
     @Test
     void gerarRelatorio() throws Exception {
         var relatorioPontoDTO = getRelatorioPontoDTO();
+        var usuarioDTO = getUsuarioDTO();
 
-        when(enviaRelatorioInputPort.enviaRelatorioPonto(any(RelatorioPontoDTO.class))).thenReturn(asJsonString((relatorioPontoDTO)));
+        when(buscaUsuarioInputPort.buscaUsuarioPorMatricula(any(String.class))).thenReturn(usuarioDTO);
+        when(enviaRelatorioInputPort.enviaRelatorioPontoParaFilaRelatorios(any(RelatorioPontoDTO.class))).thenReturn(asJsonString(relatorioPontoDTO));
+
+        when(enviaRelatorioInputPort.enviaRelatorioPontoParaFilaRelatorios(any(RelatorioPontoDTO.class))).thenReturn(asJsonString((relatorioPontoDTO)));
+        when(buscaUsuarioInputPort.buscaUsuarioPorMatricula(any(String.class))).thenReturn(usuarioDTO);
 
         ResultActions result = mockMvc.perform(post("/ponto/relatorio")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +108,7 @@ class PontoControllerTest {
 
         result.andExpect(status().isOk());
 
-        verify(enviaRelatorioInputPort, times(1)).enviaRelatorioPonto(any(RelatorioPontoDTO.class));
+        verify(enviaRelatorioInputPort, times(1)).enviaRelatorioPontoParaFilaRelatorios(any(RelatorioPontoDTO.class));
         verifyNoMoreInteractions(enviaRelatorioInputPort);
     }
 
@@ -106,7 +120,7 @@ class PontoControllerTest {
 
         ResultActions result = mockMvc.perform(post("/ponto")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(relatorioPontoRequest))
+                .content(asJsonString(pontoRequest))
         );
 
         result.andExpect(status().isCreated());
