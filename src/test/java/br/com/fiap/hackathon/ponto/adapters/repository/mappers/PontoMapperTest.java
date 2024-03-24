@@ -5,6 +5,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import br.com.fiap.hackathon.ponto.adapters.repository.models.Ponto;
 
+import java.util.List;
+
 import static br.com.fiap.hackathon.ponto.utils.PontoHelper.getPonto;
 import static br.com.fiap.hackathon.ponto.utils.PontoHelper.getPontoDTO;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -39,5 +41,16 @@ public class PontoMapperTest {
         assertThat(produtoDTO.horaRegistro()).isEqualTo(produto.getRegistro());
         assertThat(produtoDTO.tipoRegistro()).isEqualTo(produto.getTipoRegistro());
         assertThat(produtoDTO.matricula()).isEqualTo(produto.getMatricula());
+    }
+    @Test
+    void dadoListaPonto_DeveFazerMapper_RetornarListaPontoDTO() {
+        var produtoList = List.of(getPonto());
+
+        var produtoDTO = produtoMapper.toPontoDTOList(produtoList);
+
+        assertThat(produtoDTO.get(0)).isNotNull().isInstanceOf(PontoDTO.class);
+        assertThat(produtoDTO.get(0).horaRegistro()).isEqualTo(produtoList.get(0).getRegistro());
+        assertThat(produtoDTO.get(0).tipoRegistro()).isEqualTo(produtoList.get(0).getTipoRegistro());
+        assertThat(produtoDTO.get(0).matricula()).isEqualTo(produtoList.get(0).getMatricula());
     }
 }

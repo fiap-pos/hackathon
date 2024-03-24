@@ -13,4 +13,9 @@ public abstract class RelatorioHelper {
     public static RelatorioPontoDTO getRelatorioPontoDTO(){
         return new RelatorioPontoDTO(MATRICULA, MES, ANO);
     }
+    public static String getMensagem() {
+        return "Relatório Matricula: " + getRelatorioPontoDTO().matricula() +
+                " - Mês/Ano: " + String.format("%02d", getRelatorioPontoDTO().mes()) + "/" + getRelatorioPontoDTO().ano() +
+                " enviado para fila de relatórios com sucesso!";
+    }
 }
