@@ -44,7 +44,7 @@ class BuscaStatusDiaUseCaseTest {
 
         var pontoList = buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(pontoDTO.matricula());
 
-        assertThat(pontoList).isNotNull().isNotEmpty()
+        assertThat(pontoList.registros()).isNotNull().isNotEmpty()
                 .allSatisfy(pontoBuscado -> {
                     assertThat(pontoBuscado.id()).isEqualTo(pontoDTOList.get(0).id());
                     assertThat(pontoBuscado.horaRegistro()).isEqualTo(pontoDTOList.get(0).horaRegistro());

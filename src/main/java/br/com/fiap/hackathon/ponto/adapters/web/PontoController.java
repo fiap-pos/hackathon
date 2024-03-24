@@ -3,6 +3,7 @@ package br.com.fiap.hackathon.ponto.adapters.web;
 import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
+import br.com.fiap.hackathon.ponto.adapters.web.models.responses.PontoDiaResponse;
 import br.com.fiap.hackathon.ponto.adapters.web.models.responses.PontoResponse;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.in.*;
@@ -34,11 +35,12 @@ public class PontoController {
     @Operation(summary = "Busca status do dia")
     @GetMapping("")
     @SecurityRequirement(name = "Bearer Authentication")
-    public ResponseEntity<List<PontoResponse>> buscarStatusDiaPorMatricula(@Parameter(hidden = true) @RequestHeader(name = "Authorization") String token) {
+    public ResponseEntity<PontoDiaResponse> buscarStatusDiaPorMatricula(@Parameter(hidden = true) @RequestHeader(name = "Authorization") String token) {
         var matricula = tokenInputport.getMatricula(token);
         var pontosOut = buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(matricula);
-        var listPontoResponse = mapper.toPontoListResponse(pontosOut);
-        return ResponseEntity.ok(listPontoResponse);
+        var listPontoResponse = mapper.toPontoListResponse(pontosOut.registros());
+        var pontoDiaResponse = new PontoDiaResponse(listPontoResponse, pontosOut.totalHorasDia());
+        return ResponseEntity.ok(pontoDiaResponse);
     }
 
     @Operation(summary = "Gerar relatorio")

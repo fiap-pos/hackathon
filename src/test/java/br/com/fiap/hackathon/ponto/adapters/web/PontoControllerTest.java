@@ -5,6 +5,7 @@ import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
 import br.com.fiap.hackathon.ponto.adapters.web.models.requests.RelatorioPontoRequest;
 import br.com.fiap.hackathon.ponto.core.domain.entities.AuthToken;
 import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
+import br.com.fiap.hackathon.ponto.core.dtos.PontoDiaDTO;
 import br.com.fiap.hackathon.ponto.core.dtos.RelatorioPontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaUsuarioInputPort;
@@ -88,7 +89,7 @@ class PontoControllerTest {
 
         var token = authToken.criar(usuario).accessToken();
 
-        when(buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(getPontoDTO().matricula())).thenReturn(Collections.singletonList(pontoDTO));
+        when(buscaStatusDiaInputPort.buscaStatusDiaPorMatricula(getPontoDTO().matricula())).thenReturn(new PontoDiaDTO(Collections.singletonList(pontoDTO), "08:00"));
 
         ResultActions result = mockMvc.perform(get("/ponto", pontoDTO.matricula())
                 .contentType(MediaType.APPLICATION_JSON)
