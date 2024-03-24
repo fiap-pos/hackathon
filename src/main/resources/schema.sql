@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS usuario(
     matricula VARCHAR(30) PRIMARY KEY,
-    senha VARCHAR(30) NOT NULL,
+    senha VARCHAR(80) NOT NULL,
     email VARCHAR(80) NOT NULL
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS ponto (
     FOREIGN KEY (matricula) REFERENCES usuario(matricula)
 );
 
-insert into usuario (matricula, senha, email) values ('657849', '123456', 'user@email.com');
+insert into usuario (matricula, senha, email) values ('657849', '$2a$10$py8KAxJhU7nk1lxDnF9yMutOBbu1i8ylXJx5pEoInz3g1o8VMLS1u', 'user@email.com');
 insert into ponto (matricula, hora_data_registro, tipo_registro) values ('657849', '2024-02-01T08:00:00', 'ENTRADA');
 insert into ponto (matricula, hora_data_registro, tipo_registro) values ('657849', '2024-02-01T12:00:00', 'SAIDA');
 insert into ponto (matricula, hora_data_registro, tipo_registro) values ('657849', '2024-02-01T13:00:00', 'ENTRADA');
