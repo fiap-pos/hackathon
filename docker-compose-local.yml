@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  postgres:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: root
+      POSTGRES_HOST: postgres
+      POSTGRES_DB: ponto_db
+    ports:
+      - "5432:5432"
+    networks:
+      - hackathon_61_ponto_network
+    expose:
+      - 5432
+  localstack:
+    container_name: hackathon_61_ponto_localstack
+    image: localstack/localstack
+    ports:
+      - "4566:4566"
+      - "4510-4559:4510-4559"
+    environment:
+      AWS_ACCESS_KEY_ID: admin
+      AWS_SECRET_ACCESS_KEY: admin
+      AWS_REGION: us-east-1
+    volumes:
+      - './docker/localstack/setup-queues.sh:/etc/localstack/init/ready.d/init-sqs.sh'
+networks:
+  hackathon_61_ponto_network:
+    name: "hackathon_app_network"
+    driver: bridge

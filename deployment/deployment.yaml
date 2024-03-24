@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hackathon-ponto
+  labels:
+    app: hackathon-ponto
+spec:
+  template:
+    metadata:
+      name: hackathon-ponto
+      labels:
+        app: hackathon-ponto
+    spec:
+      serviceAccountName: hackathon-ponto-sa
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: hackathon-ponto-secrets
+        - name: hackathon-volume
+          hostPath:
+            path: /home/hackathon-volume
+            type: DirectoryOrCreate
+      containers:
+        - name: hackathon-ponto
+          image: vwnunes/hackathon-61-ponto:latest
+          imagePullPolicy: "Always"
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DB_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: postgresHost
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: postgresUser
+            - name: DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: postgresPassword
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: authSecret
+            - name: MAIL_API_URL
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: mailApiUrl
+            - name: MAIL_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: mailApiKey
+          volumeMounts:
+            - name: hackathon-volume
+              mountPath: "/mnt/hackathon-ponto-volume"
+            - name: secrets-store-inline
+              mountPath: "/mnt/hackathon-ponto-secrets"
+              readOnly: true
+  replicas: 2
+  selector:
+    matchLabels:
+      app: hackathon-ponto
