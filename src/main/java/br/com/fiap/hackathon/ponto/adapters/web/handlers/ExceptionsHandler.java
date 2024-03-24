@@ -1,8 +1,6 @@
 package br.com.fiap.hackathon.ponto.adapters.web.handlers;
 
-import br.com.fiap.hackathon.ponto.core.domain.exceptions.BadRequestException;
-import br.com.fiap.hackathon.ponto.core.domain.exceptions.EntityAlreadyExistException;
-import br.com.fiap.hackathon.ponto.core.domain.exceptions.EntityNotFoundException;
+import br.com.fiap.hackathon.ponto.core.domain.exceptions.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,4 +118,27 @@ public class ExceptionsHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDetails);
     }
 
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorDetails> handlerUnauthorizedException(UnauthorizedException e, HttpServletRequest request) {
+        var errorDetails = new ErrorDetails.Builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message(e.getMessage())
+                .timestamp(System.currentTimeMillis())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDetails);
+    }
+
+    @ExceptionHandler(AuthenticationTokenInvalidException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ResponseEntity<ErrorDetails> handlerAuthenticationTokenInvalidException(AuthenticationTokenInvalidException e, HttpServletRequest request) {
+        var errorDetails = new ErrorDetails.Builder()
+                .status(HttpStatus.UNAUTHORIZED.value())
+                .message(e.getMessage())
+                .timestamp(System.currentTimeMillis())
+                .build();
+
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDetails);
+    }
 }
