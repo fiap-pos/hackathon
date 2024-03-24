@@ -13,9 +13,9 @@ import software.amazon.awssdk.services.sqs.model.Message;
 
 @Service
 @RequiredArgsConstructor
-public class FilaRelatorisListener {
+public class FilaRelatoriosListener {
 
-    private final Logger logger = LoggerFactory.getLogger(FilaRelatorisListener.class);
+    private final Logger logger = LoggerFactory.getLogger(FilaRelatoriosListener.class);
 
     private final GeraRelatorioOutputPort geraRelatorioOutputPort;
 
@@ -24,14 +24,10 @@ public class FilaRelatorisListener {
 
     @SqsListener("${aws.sqs.queues.relatorios}")
     public void listen(Message menssagem) throws JsonProcessingException {
-        try {
-            logger.info("Recebendo mensagem da fila de relatórios");
-            var filaRelatorioDTO = objectMapper.readValue(menssagem.body(), FilaRelatorioDTO.class);
-            logger.info("Mensagem recebida da fila de relatórios com sucesso");
-            geraRelatorio(filaRelatorioDTO);
-        } catch (Exception e) {
-            logger.error("Erro ao processar mensagem da fila de relatórios", e);
-        }
+        logger.info("Recebendo mensagem da fila de relatórios");
+        var filaRelatorioDTO = objectMapper.readValue(menssagem.body(), FilaRelatorioDTO.class);
+        logger.info("Mensagem recebida da fila de relatórios com sucesso");
+        geraRelatorio(filaRelatorioDTO);
     }
 
     private void geraRelatorio(FilaRelatorioDTO filaRelatorioDTO) {

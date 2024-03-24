@@ -1,6 +1,7 @@
 package br.com.fiap.hackathon.ponto.adapters.repository.sqs;
 
 import br.com.fiap.hackathon.ponto.adapters.gateways.models.FilaRelatorioDTO;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.awspring.cloud.sqs.operations.SqsTemplate;
 import org.slf4j.Logger;
@@ -24,13 +25,9 @@ public class RelatorioPontoSqsPublisher {
         this.sqsTemplate = sqsTemplate;
     }
 
-    public void publicaFilaRelatorios(FilaRelatorioDTO filaRelatorioDTO) {
-        try {
-            logger.info("Publicando mensagem na fila de relatórios");
-            sqsTemplate.send(filaRelatorios, objectMapper.writeValueAsString(filaRelatorioDTO));
-            logger.info("Mensagem publicada com sucesso");
-        } catch (Exception e) {
-            logger.error("Erro ao publicar mensagem na fila de relatórios", e);
-        }
+    public void publicaFilaRelatorios(FilaRelatorioDTO filaRelatorioDTO) throws JsonProcessingException {
+        logger.info("Publicando mensagem na fila de relatórios");
+        sqsTemplate.send(filaRelatorios, objectMapper.writeValueAsString(filaRelatorioDTO));
+        logger.info("Mensagem publicada com sucesso");
     }
 }

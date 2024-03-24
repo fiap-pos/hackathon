@@ -1,6 +1,9 @@
 package br.com.fiap.hackathon.ponto.adapters.web;
 
 import br.com.fiap.hackathon.ponto.adapters.web.mappers.PontoMapper;
+import br.com.fiap.hackathon.ponto.adapters.web.models.requests.PontoRequest;
+import br.com.fiap.hackathon.ponto.core.dtos.PontoDTO;
+import br.com.fiap.hackathon.ponto.core.dtos.RelatorioPontoDTO;
 import br.com.fiap.hackathon.ponto.core.ports.in.BuscaStatusDiaInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.EnviaRelatorioInputPort;
 import br.com.fiap.hackathon.ponto.core.ports.in.RegistraPontoInputPort;
@@ -16,12 +19,16 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.Collections;
 
+import static br.com.fiap.hackathon.ponto.utils.JsonToStringHelper.asJsonString;
 import static br.com.fiap.hackathon.ponto.utils.PontoHelper.getPontoDTO;
+import static br.com.fiap.hackathon.ponto.utils.RelatorioHelper.getRelatorioPontoDTO;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 class PontoControllerTest {
@@ -38,9 +45,11 @@ class PontoControllerTest {
 
     PontoMapper mapper;
     AutoCloseable mock;
+    PontoRequest relatorioPontoRequest;
 
     @BeforeEach
     void setUp() {
+        relatorioPontoRequest = new PontoRequest("12345");
         this.mapper = new PontoMapper();
         mock = MockitoAnnotations.openMocks(this);
         PontoController pontoController = new PontoController(
@@ -72,4 +81,37 @@ class PontoControllerTest {
         verifyNoMoreInteractions(buscaStatusDiaInputPort);
     }
 
+    @Test
+    void gerarRelatorio() throws Exception {
+        var relatorioPontoDTO = getRelatorioPontoDTO();
+
+        when(enviaRelatorioInputPort.enviaRelatorioPonto(any(RelatorioPontoDTO.class))).thenReturn(asJsonString((relatorioPontoDTO)));
+
+        ResultActions result = mockMvc.perform(post("/ponto/relatorio")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(relatorioPontoRequest))
+        );
+
+        result.andExpect(status().isOk());
+
+        verify(enviaRelatorioInputPort, times(1)).enviaRelatorioPonto(any(RelatorioPontoDTO.class));
+        verifyNoMoreInteractions(enviaRelatorioInputPort);
+    }
+
+    @Test
+    void registrarPonto() throws Exception {
+        var pontoDTO = getPontoDTO();
+
+        when(registraPontoInputPort.registrar(any(PontoDTO.class))).thenReturn(pontoDTO);
+
+        ResultActions result = mockMvc.perform(post("/ponto")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(relatorioPontoRequest))
+        );
+
+        result.andExpect(status().isCreated());
+
+        verify(registraPontoInputPort, times(1)).registrar(any(PontoDTO.class));
+        verifyNoMoreInteractions(registraPontoInputPort);
+    }
 }
