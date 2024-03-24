@@ -45,6 +45,11 @@ spec:
                 secretKeyRef:
                   name: hackathon-ponto-secrets-aws
                   key: postgresPassword
+            - name: AUTH_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: hackathon-ponto-secrets-aws
+                  key: authSecret
             - name: MAIL_API_URL
               valueFrom:
                 secretKeyRef:
